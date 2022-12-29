@@ -1,12 +1,11 @@
 <script>
   import { TodoStore } from '../stores/Todo';
-  console.log($TodoStore);
 
-  $: count = $TodoStore.length;
   $: completedCount = $TodoStore.filter((a) => a.completed).length;
+  $: inProgressCount = $TodoStore.filter((a) => !a.completed).length;
 </script>
 
-<div class="flex justify-between items-center mb-4">
-  <span>Total items: {count}</span>
+<div class="flex justify-between items-center mb-8">
+  <span>In Progress: {inProgressCount}</span>
   <span>Completed todos: {completedCount}</span>
 </div>
