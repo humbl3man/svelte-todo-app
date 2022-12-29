@@ -1,21 +1,9 @@
 import { writable } from 'svelte/store';
 
-const TodoStore = writable([
-  {
-    id: 1,
-    name: 'Learn Svelte',
-    completed: false
-  },
-  {
-    id: 2,
-    name: 'Learn React',
-    completed: true
-  },
-  {
-    id: 3,
-    name: 'Learn SASS',
-    completed: true
-  }
-]);
+const initialTodos = JSON.parse(localStorage.getItem('todos')) || [];
+
+const TodoStore = writable(initialTodos);
+// update localStorage whenever todos state changes
+TodoStore.subscribe((todos) => localStorage.setItem('todos', JSON.stringify(todos)));
 
 export { TodoStore };
