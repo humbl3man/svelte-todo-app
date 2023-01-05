@@ -8,27 +8,23 @@
 </script>
 
 <h2 class="my-2 font-bold">In Progress</h2>
-{#if inProgress.length > 0}
-  <ul>
-    {#each inProgress as item (item.id)}
-      <li in:fade out:fade>
-        <TodoItem {item} />
-      </li>
-    {/each}
-  </ul>
-{:else}
-  <p>Nothing in progress.</p>
-{/if}
+<div>
+  {#each inProgress as item (item.id)}
+    <p in:fade out:fade>
+      <TodoItem {item} />
+    </p>
+  {:else}
+    <p>Nothing.</p>
+  {/each}
+</div>
 
 <h2 class="my-2 font-bold">Completed</h2>
-{#if completed.length > 0}
-  <ul>
-    {#each completed as item (item.id)}
-      <li in:fade out:fade>
-        <TodoItem {item} />
-      </li>
-    {/each}
-  </ul>
-{:else}
-  <p>Nothing in completed.</p>
-{/if}
+<div>
+  {#each completed as item (item.id)}
+    <p in:fade out:fade>
+      <TodoItem {item} />
+    </p>
+  {:else}
+    <p>Nothing.</p>
+  {/each}
+</div>
