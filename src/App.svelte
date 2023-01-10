@@ -10,9 +10,6 @@
   function toggleAboutModal() {
     showAboutModal = !showAboutModal;
   }
-  function handleAboutModalClose() {
-    showAboutModal = false;
-  }
 </script>
 
 <main class="h-screen w-full pt-16 bg-slate-500">
@@ -25,7 +22,7 @@
     </div>
   </div>
 
-  <Modal show={showAboutModal} onClose={handleAboutModalClose}>
+  <Modal show={showAboutModal} on:click={toggleAboutModal} on:keypress>
     <svelte:fragment slot="heading">About this App</svelte:fragment>
     <svelte:fragment slot="text">
       <p class="mb-4">
