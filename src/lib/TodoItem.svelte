@@ -25,5 +25,7 @@
   <button on:click={deleteTodo} class="absolute flex items-center justify-center -top-[5px] -right-[5px] bg-red-300 text-black rounded-full leading-none text-xl p-1 w-6 h-6"
     >&times;</button
   >
-  <label class="cursor-pointer inline-block"><input type="checkbox" checked={item.completed} on:click={toggleTodo} /> <span>{item.name}</span></label>
+  <label class="cursor-pointer inline-block" class:line-through={item.completed} class:text-gray-500={item.completed}
+    ><input type="checkbox" checked={item.completed} on:click={toggleTodo} /> <span>{item.name}</span></label
+  >
 </div>

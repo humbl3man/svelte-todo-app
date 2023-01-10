@@ -14,7 +14,7 @@
       <TodoItem {item} />
     </p>
   {:else}
-    <p>Nothing.</p>
+    <p>No items in progress...</p>
   {/each}
 </div>
 
@@ -25,6 +25,6 @@
       <TodoItem {item} />
     </p>
   {:else}
-    <p>Nothing.</p>
+    <p>No items completed...</p>
   {/each}
 </div>
