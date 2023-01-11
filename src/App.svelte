@@ -1,5 +1,4 @@
 <script>
-  import { afterUpdate } from 'svelte';
   import TodoForm from './lib/TodoForm.svelte';
   import TodoList from './lib/TodoList.svelte';
   import TodoStats from './lib/TodoStats.svelte';
