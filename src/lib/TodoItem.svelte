@@ -28,16 +28,13 @@
     if (!newValue) return;
 
     TodoStore.update((currentTodos) => {
-      const index = currentTodos.indexOf(id);
-      currentTodos = [
-        ...currentTodos.slice(0, index),
-        {
-          ...currentTodos[index],
-          text: newValue
-        },
-        ...currentTodos.slice(index + 1)
-      ];
       onEditComplete(id);
+      return currentTodos.map((t) => {
+        if (t.id === id) {
+          t.name = newValue;
+        }
+        return t;
+      });
     });
   }
 </script>
@@ -45,9 +42,15 @@
 <div class="bg-white px-2 py-3 my-4 rounded-md shadow-sm relative">
   {#if !item.completed}
     {#if isEditing}
-      <form on:submit|preventDefault={() => updateTodo(item.id, editValue)}>
-        <input type="text" bind:value={editValue} placeholder={editValue} />
-        <button on:click={() => toggleEditMode(item.id)}>Cancel</button>
+      <form
+        on:submit|preventDefault={() => {
+          console.log('submit');
+          updateTodo(item.id, editValue);
+        }}
+      >
+        <input type="text" bind:value={editValue} placeholder={editValue} class="border p-2 bg-white block w-full" />
+        <button type="submit">Submit</button>
+        <button type="button" on:click={() => toggleEditMode(item.id)}>Cancel</button>
       </form>
     {:else}
       <button class="underline text-blue-600" on:click={() => toggleEditMode(item.id)}>Edit this item</button>
