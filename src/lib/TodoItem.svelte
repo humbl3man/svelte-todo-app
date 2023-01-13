@@ -1,11 +1,13 @@
 <script>
+  import { createEventDispatcher } from 'svelte';
   import { TodoStore } from '../stores/Todo';
+  import EditIcon from 'svelte-icons/md/MdModeEdit.svelte';
 
   export let item;
   export let isEditing = false;
   export let editValue = item.name;
-  export let toggleEditMode = undefined;
-  export let onEditComplete = undefined;
+
+  const dispatch = createEventDispatcher();
 
   function toggleTodo() {
     TodoStore.update((currentTodos) => {
@@ -28,7 +30,7 @@
     if (!newValue) return;
 
     TodoStore.update((currentTodos) => {
-      onEditComplete(id);
+      dispatch('exitEditMode', id);
       return currentTodos.map((t) => {
         if (t.id === id) {
           t.name = newValue;
@@ -37,33 +39,41 @@
       });
     });
   }
+
+  function focusInEdit(inputEl) {
+    inputEl.focus();
+  }
 </script>
 
-<div class="bg-white px-2 py-3 my-4 rounded-md shadow-sm relative">
+<div class="bg-white px-2 py-3 my-4 rounded-md shadow-sm relative flex items-center">
   {#if !item.completed}
     {#if isEditing}
-      <form
-        on:submit|preventDefault={() => {
-          console.log('submit');
-          updateTodo(item.id, editValue);
-        }}
-      >
-        <input type="text" bind:value={editValue} placeholder={editValue} class="border p-2 bg-white block w-full" />
-        <button type="submit">Submit</button>
-        <button type="button" on:click={() => toggleEditMode(item.id)}>Cancel</button>
+      <form on:submit|preventDefault={() => updateTodo(item.id, editValue)}>
+        <input
+          type="text"
+          bind:value={editValue}
+          use:focusInEdit
+          on:blur={() => dispatch('exitEditMode', item.id)}
+          placeholder={editValue}
+          class="border py-1 px-2 bg-white w-full block"
+        />
       </form>
     {:else}
-      <button class="underline text-blue-600" on:click={() => toggleEditMode(item.id)}>Edit this item</button>
       <label class="cursor-pointer inline-block" class:text-gray-500={item.completed}
         ><input type="checkbox" checked={item.completed} on:click={toggleTodo} /> <span>{item.name}</span></label
       >
+      <button class="underline text-blue-600 text-sm ml-2" aria-label="Edit" on:click={() => dispatch('enterEditMode', item.id)}>
+        <div class="w-6 h-6 text-black">
+          <EditIcon />
+        </div>
+      </button>
     {/if}
   {:else}
-    <button on:click={deleteTodo} class="absolute flex items-center justify-center -top-[5px] -right-[5px] bg-red-300 text-black rounded-full leading-none text-xl p-1 w-6 h-6"
-      >&times;</button
-    >
     <label class="cursor-pointer inline-block line-through" class:text-gray-500={item.completed}
       ><input type="checkbox" checked={item.completed} on:click={toggleTodo} /> <span>{item.name}</span></label
     >
   {/if}
+  <button on:click={deleteTodo} class="absolute flex items-center justify-center -top-[5px] -right-[5px] bg-red-300 text-black rounded-full leading-none text-xl p-1 w-6 h-6"
+    >&times;</button
+  >
 </div>

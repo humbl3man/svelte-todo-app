@@ -5,7 +5,8 @@
 
   let editIds = [];
 
-  function toggleEditMode(id) {
+  function enterEditMode(e) {
+    const id = e.detail;
     const index = editIds.indexOf(id);
     if (index !== -1) {
       editIds = [...editIds.slice(0, index), ...editIds.slice(index + 1)];
@@ -14,9 +15,10 @@
     }
   }
 
-  function onEditComplete(id) {
-    const editIndex = editIds.indexOf(id);
-    editIds = [...editIds.slice(0, editIndex), ...editIds.slice(editIndex + 1)];
+  function exitEditMode(e) {
+    const id = e.detail;
+    const index = editIds.indexOf(id);
+    editIds = [...editIds.slice(0, index), ...editIds.slice(index + 1)];
   }
 
   $: completed = $TodoStore.filter((t) => t.completed);
@@ -27,7 +29,7 @@
 <div>
   {#each inProgress as item (item.id)}
     <p in:fade out:fade>
-      <TodoItem {item} {toggleEditMode} {onEditComplete} isEditing={editIds.indexOf(item.id) > -1} />
+      <TodoItem {item} on:enterEditMode={enterEditMode} on:exitEditMode={exitEditMode} isEditing={editIds.indexOf(item.id) > -1} />
     </p>
   {:else}
     <p>No items in progress...</p>
