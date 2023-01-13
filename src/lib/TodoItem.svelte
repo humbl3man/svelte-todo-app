@@ -1,13 +1,12 @@
 <script>
-  import { createEventDispatcher } from 'svelte';
   import { TodoStore } from '../stores/Todo';
   import EditIcon from 'svelte-icons/md/MdModeEdit.svelte';
 
   export let item;
-  export let isEditing = false;
-  export let editValue = item.name;
+  let isEditing = false;
+  let editValue = item.name;
 
-  const dispatch = createEventDispatcher();
+  // const dispatch = createEventDispatcher();
 
   function toggleTodo() {
     TodoStore.update((currentTodos) => {
@@ -30,7 +29,7 @@
     if (!newValue) return;
 
     TodoStore.update((currentTodos) => {
-      dispatch('exitEditMode', id);
+      isEditing = false;
       return currentTodos.map((t) => {
         if (t.id === id) {
           t.name = newValue;
@@ -53,7 +52,10 @@
           type="text"
           bind:value={editValue}
           use:focusInEdit
-          on:blur={() => dispatch('exitEditMode', item.id)}
+          on:blur={() => {
+            isEditing = false;
+            editValue = item.name;
+          }}
           placeholder={editValue}
           class="border py-1 px-2 bg-white w-full block"
         />
@@ -62,7 +64,7 @@
       <label class="cursor-pointer inline-block" class:text-gray-500={item.completed}
         ><input type="checkbox" checked={item.completed} on:click={toggleTodo} /> <span>{item.name}</span></label
       >
-      <button class="underline text-blue-600 text-sm ml-2" aria-label="Edit" on:click={() => dispatch('enterEditMode', item.id)}>
+      <button class="underline text-blue-600 text-sm ml-2" aria-label="Edit" on:click={() => (isEditing = true)}>
         <div class="w-6 h-6 text-black">
           <EditIcon />
         </div>
