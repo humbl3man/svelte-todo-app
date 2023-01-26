@@ -1,6 +1,7 @@
 <script>
   import { TodoStore } from '../stores/Todo';
   import EditIcon from 'svelte-icons/md/MdModeEdit.svelte';
+  import { destroy_block } from 'svelte/internal';
 
   export let item;
   let isEditing = false;
@@ -40,7 +41,13 @@
   }
 
   function focusInEdit(inputEl) {
+    console.log('create', inputEl);
     inputEl.focus();
+    return {
+      destroy() {
+        console.log('destroy', inputEl);
+      }
+    };
   }
 </script>
 
